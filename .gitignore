@@ -1,0 +1,7 @@
+performers_data.json
+result_output/
+checkpoint.json
+checkpoint.json.tmp
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

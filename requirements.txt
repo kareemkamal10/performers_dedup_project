@@ -1,0 +1,5 @@
+requests
+Pillow
+imagehash
+opencv-python-headless
+huggingface_hub
