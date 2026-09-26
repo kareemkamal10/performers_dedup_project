@@ -76,3 +76,35 @@ def upload_result_output() -> None:
         commit_message="Upload final pipeline result_output",
     )
     logger.info("result_output uploaded to HF dataset")
+
+
+def download_final_json(local_path: str = None) -> str:
+    """Fetches the main run's already-uploaded result_output/performers_data_final.json."""
+    _require_creds()
+    local_path = local_path or os.path.join(
+        config.RESULT_OUTPUT_DIR, "performers_data_final.json"
+    )
+    return hf_hub_download(
+        repo_id=config.HF_DATASET_REPO_ID,
+        repo_type="dataset",
+        filename="result_output/performers_data_final.json",
+        token=config.HF_TOKEN,
+        local_dir=os.path.dirname(local_path),
+    )
+
+
+def upload_file_generic(local_path: str, path_in_repo: str) -> None:
+    """Generic single-file uploader, used by side scripts (e.g. single_image_check.py)
+    that don't fit the whole-folder upload_result_output() shape."""
+    _require_creds()
+    if not os.path.exists(local_path):
+        return
+    upload_file(
+        path_or_fileobj=local_path,
+        path_in_repo=path_in_repo,
+        repo_id=config.HF_DATASET_REPO_ID,
+        repo_type="dataset",
+        token=config.HF_TOKEN,
+        commit_message=f"Upload {path_in_repo}",
+    )
+    logger.info("%s uploaded to HF dataset", path_in_repo)

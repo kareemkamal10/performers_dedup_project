@@ -108,4 +108,26 @@ report.py             - builds report.txt and failed_downloads.csv
 pipeline.py           - orchestrates batching + the download/process overlap
 main.py               - entry point
 kaggle_cell.py        - the single Kaggle notebook cell to paste and run
+single_image_check.py - extra pass (see below) over elements the main run excluded
+kaggle_cell_single.py - the Kaggle cell to paste and run for that extra pass
 ```
+
+## Extra pass: `single_image_check.py`
+
+The main run excludes any element left with 0 or 1 unique URL after
+merging - there's nothing to visually dedupe there. This script runs
+**after** the main pipeline has finished (it needs `result_output/
+performers_data_final.json` to know which elements to skip) and:
+
+1. Re-reads `performers_data.json`, and skips any element whose `id` is
+   already in the main run's final JSON.
+2. Downloads the single image of every remaining (single-url) element.
+3. Checks each for WebP-Lossy candidacy only - **no near-duplicate
+   detection**, since there's only one image per element to begin with.
+4. Writes `result_output/single_report.txt` and
+   `result_output/single_failed_downloads.csv`, and uploads both to the
+   HF dataset (same as the main run).
+
+It has its own checkpoint (`single_checkpoint.json`) and batches the same
+way as the main pipeline, so it's resumable and Kaggle-session-friendly
+too. Run it via `kaggle_cell_single.py` (same 3 placeholders as before).

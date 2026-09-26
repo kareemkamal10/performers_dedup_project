@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def _collect_urls(element: dict) -> list:
+def collect_urls(element: dict) -> list:
     urls = []
     single = element.get("image")
     if single:
@@ -34,7 +34,7 @@ def merge_and_filter(elements: list) -> tuple[list, dict]:
     excluded_empty = 0
 
     for el in elements:
-        raw_urls = _collect_urls(el)
+        raw_urls = collect_urls(el)
         seen = set()
         unique_urls = []
         for u in raw_urls:
