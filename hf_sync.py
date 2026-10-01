@@ -37,6 +37,19 @@ def download_input_json(local_path: str = None) -> str:
     return path
 
 
+def download_scenes_json(local_path: str = None) -> str:
+    """Fetch scenes/scenes.json while preserving its dataset subdirectory."""
+    _require_creds()
+    local_path = local_path or os.path.join(config.PROJECT_ROOT, "scenes", "scenes.json")
+    return hf_hub_download(
+        repo_id=config.HF_DATASET_REPO_ID,
+        repo_type="dataset",
+        filename="scenes/scenes.json",
+        token=config.HF_TOKEN,
+        local_dir=config.PROJECT_ROOT,
+    )
+
+
 def download_checkpoint_if_exists():
     _require_creds()
     try:

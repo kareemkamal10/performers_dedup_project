@@ -110,7 +110,23 @@ main.py               - entry point
 kaggle_cell.py        - the single Kaggle notebook cell to paste and run
 single_image_check.py - extra pass (see below) over elements the main run excluded
 kaggle_cell_single.py - the Kaggle cell to paste and run for that extra pass
+kaggle_cell_scenes.py  - the Kaggle cell to paste and run for scenes.json
+scenes_check.py        - WebP analysis pass for images in scenes/scenes.json
 ```
+
+## Scenes pass: `scenes_check.py`
+
+This pass downloads `scenes/scenes.json` from the dataset, checks every URL in
+each scene's `images` list for WebP-Lossy candidacy, and writes/uploads these
+files under `scenes/`:
+
+- `scenes_report.txt` — image count and size totals, candidate percentages,
+  and download results.
+- `scenes_failed_downloads.csv` — URLs that failed after 3 retries.
+- `scenes_checkpoint.json` — batch resume state.
+
+Run it through `kaggle_cell_scenes.py` after filling the same placeholders as
+the other Kaggle cells. No image conversion or visual deduplication is done.
 
 ## Extra pass: `single_image_check.py`
 
